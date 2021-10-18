@@ -1,0 +1,9 @@
+/home/hallvaaw/anda/pc12_test
+/home/hallvaaw/fiji/Fiji.app
+neurites cells branching 
+PC12
+no
+neurites;cells;branching;
+0
+1040
+1392
