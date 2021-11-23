@@ -44,28 +44,9 @@ def file_read(input_filenames):
 
 
 headdir_ = param_file_read("pipeline_parameters.txt")[0]
-# DIRNAMES = dir_read(f"{headdir_}/dir_names.txt")
 FILENAMES = file_read(f"{headdir_}/file_names.txt")
 
-# def get_input(wilcards):
-#     input_list = []
-#     if param_file_read("pipeline_parameters.txt")[4] == "yes":
-#         input_list.append(expand("{dir_}_results_{metric}/{file_}.csv", dir_ = param_file_read("pipeline_parameters.txt")[0], metric = param_file_read("pipeline_parameters.txt")[2].split(" ")[0:-1], file_ = FILENAMES, allow_missing=True))
-#         input_list.append(expand("{dir_}_outlines_{metric}/{file_}", dir_ = param_file_read("pipeline_parameters.txt")[0], metric = param_file_read("pipeline_parameters.txt")[2].split(" ")[0:-1], file_ = FILENAMES, allow_missing=True))
-# 
-#     else:
-#         input_list.append(expand("{dir_}_results_{metric}/{file_}.csv", dir_ = param_file_read("pipeline_parameters.txt")[0], metric = param_file_read("pipeline_parameters.txt")[2].split(" ")[0:-1], file_ = FILENAMES, allow_missing=True))
-# 
-#     return input_list
 
-
-# rule all:
-#     input:
-#         get_input
-
-# rule all:
-#     input:
-#         expand("{dir_}_results_{metric}/{file_}.csv", dir_ = param_file_read("pipeline_parameters.txt")[0], metric = param_file_read("pipeline_parameters.txt")[2].split(" ")[0:-1], file_ = FILENAMES, allow_missing=True)
 
 rule all:
     input:
@@ -79,7 +60,6 @@ rule all:
 checkpoint image_analysis:
     params:
         input_files = "{file_}",
-#        input_params = param_file_read("pipeline_parameters.txt")[2].split(" ")[0:-1],
         input_params = "{metric}",
         dir__name = param_file_read("pipeline_parameters.txt")[0],
         imagej_path = param_file_read("pipeline_parameters.txt")[1],
@@ -112,39 +92,3 @@ rule data_sort:
         python3 {data_sorting} {params.input_params} {params.dir__name} {params.ar_threshold} {output.outputfile}
         """
 
-#    output:
-#        output_results="{dir_}_results_{metric}/{file_}.csv",
-#        outline_images="{dir_}_outlines_{metric}/{file_}"
-
-
-#        {params.imagej_path}/ImageJ-linux64 --ij2 --headless --run {cell_metrics} "input_analysis='{params.input_params}', image_dir_='{params.dir__name}', cell_parameters='{params.cell_line}', outlines='{params.outlines_}' , filenames='{input.filenames}', outputfiles={output.output_files}, outputimages='{output.output_outlines}'"
-
-
-###        {params.imagej_path}/ImageJ-linux64 --ij2 --headless --run {cell_metrics} "input_analysis='{params.input_params}', image_dir='{params.dir__name}', cell_parameters='{params.cell_line}', outlines='{params.outlines_}', height='{params.height_}', width='{params.width_}', filenames='{params.input_files}', outputfiles='{output.output_results}', 'outlinefiles={output.outline_images}'"
-
-
-
-#        echo {params.imagej_path}/ImageJ-linux64 --ij2 --headless --run {cell_metrics} "input_analysis='{params.analysis_metrics}', image_dir_='{params.dir__name}', cell_parameters='{params.cell_line}', outlines='{params.outlines_}'"
-#        expand("{{DATE}}_results_{metric}.csv", metric = param_file_read("pipeline_parameters.txt")[2]),
-#        expand("{{DATE}}_total_{metric}.csv", metric = param_file_read("pipeline_parameters.txt")[2])
-
-
-
-#     output:
-#         output_results=expand("{dir_}_results/{metric}_{file}", dir_ = param_file_read("pipeline_parameters.txt")[0], metric = param_file_read("pipeline_parameters.txt")[2].split(" ")[0:-1], file = file_read("file_names.txt")),
-#         output_outlines=expand("{dir_}_outlines/{metric}_{file}", dir_ = param_file_read("pipeline_parameters.txt")[0], metric = param_file_read("pipeline_parameters.txt")[2].split(" ")[0:-1], file = file_read("file_names.txt"))
-
-
-# rule all:
-#     input:
-#         expand("{date}_results_{metric}.csv", metric = param_file_read("pipeline_parameters.txt")[2].split(" ")[0:-1], date = DATE),
-#         expand("{date}_total_{metric}.csv", metric = param_file_read("pipeline_parameters.txt")[2].split(" ")[0:-1], date = DATE)
-
-
-# rule all:
-#     input:
-#         expand("{dir_}_results/{metric}_{file_}.txt", dir_ = param_file_read("pipeline_parameters.txt")[0], metric = param_file_read("pipeline_parameters.txt")[2].split(" ")[0:-1], file_ = FILENAMES),
-#         expand("{dir_}_outlines/{metric}_{file_}", dir_ = param_file_read("pipeline_parameters.txt")[0], metric = param_file_read("pipeline_parameters.txt")[2].split(" ")[0:-1], file_ = FILENAMES)
-
-
-#        {params.imagej_path}/ImageJ-linux64 --ij2 --headless --run {TEST_} "dir_='{params.dir__name}', filenames='{params.input_files}'"
