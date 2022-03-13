@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import sys
 
-analysis= sys.argv[1] # Cell bodies, neurites or branching
+analysis= sys.argv[1] # Cell bodies, neurites or neurite attachment points
 dir_ =  sys.argv[2]  # Directory 
 ar_threshold = int(sys.argv[3]) # Aspect ratio threshold
 output = sys.argv[4]
@@ -62,7 +62,6 @@ def data_sort(metric):
         file_list = [i.rstrip() for i in file_list]
         for file_ in file_list:
             try:
-                print("XXXXX")
                 data = pd.read_csv(f"{dir_}_results_{metric}/{file_}.csv", usecols = ['Area', 'Minor', 'Major', 'AR'])
                 if ar_threshold > 0:
                     data_2 = data[data['AR'] > ar_threshold]
@@ -99,7 +98,7 @@ def data_sort(metric):
         df = pd.DataFrame(data = d)
         df.to_csv(f"{output}")
     
-    if metric == "branching": 
+    if metric == "attachment": 
         num_count = [] # Number of identified particles
         image = []
         file_names = open(f'{dir_}/file_names.txt', 'r')
