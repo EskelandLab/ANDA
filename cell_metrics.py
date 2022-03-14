@@ -88,7 +88,7 @@ def particle_analysis(analysis):
             IJ.saveAs(imp3, "Tiff", "{}".format(str(outlinefiles)))
 
 
-    elif analysis == "branching": # Run neurite attachment point analysis
+    elif analysis == "attachment": # Run neurite attachment point analysis
         ic = ImageCalculator() # ImageJ plugin
         img = IJ.open("{}/{}".format(str(image_dir), str(filenames))) 
         imp_c = IJ.getImage() # Cell bodies
