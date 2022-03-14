@@ -6,7 +6,7 @@ image analysis. These input parameters include:
 
     * Workdirectory - Directory where the images are saved
     * Full path to ImageJ program
-    * Aspect ratio threshold for excluding neurites and branching points
+    * Aspect ratio threshold for excluding neurites and neurite attachment points
     * Cell analysis metrics
     * Whether to save outlines of identified structures or not
 
@@ -30,9 +30,9 @@ dirs_len=${#dirs_[@]}
 
 mkdir ${dir_name}_results_cells # Results directory for cells
 mkdir ${dir_name}_results_neurites # Results directory for neurites
-mkdir ${dir_name}_results_branching # Results directory for branching
+mkdir ${dir_name}_results_branching # Results directory for neurite attachment points
 if [[ ${outlines} == "yes"  ]]; then
   mkdir ${dir_name}_outlines_cells # Outlines directory for cells
   mkdir ${dir_name}_outlines_neurites # Outlines directory for neurites
-  mkdir ${dir_name}_outlines_branching # Outlines directory for branching
+  mkdir ${dir_name}_outlines_branching # Outlines directory for neurite attachment points
 fi
