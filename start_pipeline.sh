@@ -16,7 +16,7 @@ and saved in the file_names.txt file in the same directory as the scripts and a 
 If outlines are set to be saved, an additional directory is created.
 '
 
-# python3 96_well_linux.py
+python3 96_well_linux.py
 
 scripts_dir=$(pwd) # Directory with scripts
 dir_name=$(awk 'FNR == 1 {print}' ${scripts_dir}/pipeline_parameters.txt)
@@ -24,21 +24,21 @@ outlines_=$(awk 'FNR == 10 {print}' ${scripts_dir}/pipeline_parameters.txt)
 cd ${dir_name}
 # ls ${dir_name} -d */ > dir_names.txt # Write subdirectories to file
 # ls ${dir_name} -d
-# ls ${dir_name} -d > dir_names.txt # Write subdirectories to file
+ls ${dir_name} -d > dir_names.txt # Write subdirectories to file
 ls | grep tif > file_names.txt # Write image file names to list
-# sed -i '$d' dir_names.txt # Remove last line
+sed -i '$d' dir_names.txt # Remove last line
 cd ..
 
-# readarray dirs_ < dir_names.txt
+readarray dirs_ < dir_names.txt
 dirs_len=${#dirs_[@]}
 
-# for ((i=0;i<=$dirs_len; i++));
-# do
-#   ls
-#   cd ${dirs_[$i]} # New
-#   ls | grep tif > file_names.txt # Write image file names to list
-#   cd ..
-# done
+for ((i=0;i<=$dirs_len; i++));
+do
+  ls
+  cd ${dirs_[$i]} # New
+  ls | grep tif > file_names.txt # Write image file names to list
+  cd ..
+done
 
 
 mkdir ${dir_name}_results_cells # Results directory for cells
