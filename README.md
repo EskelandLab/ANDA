@@ -35,17 +35,17 @@ From the terminal and while in "work_dir", start the Bash script by typing "bash
 
 ### Setting the analysis parameters
 
-In the next window set the analysis parameters by filling out the required information (figure 3).
+In the next window set the analysis parameters by filling out the required information (figure 1).
 * Choose the main directory as image directory.
 * Select the full path to the ImageJ program. Usually this is /home/.../Fiji.app/
 * Set neurite aspect ratio threshold for exclusion of false positive neurites. Set this value to zero if you want to include every identified object.
 * Select analysis metrics and cell line.
 * Select if you want to save object outlines or not.
-* Start the analysis by pressing "Submit and continue".
+* Start the analysis by pressing "Save and quit".
 
 ![image](https://github.com/EskelandLab/ANDA/blob/main/anda_gui.png "Graphical user interface")
 
-*Figure 3: TkInter graphical user interface for selecting parameters for image analysis.*
+*Figure 1: TkInter graphical user interface for selecting parameters for image analysis.*
 ## Running the analysis
 
 The tool will now run through the images and apply the analysis metric(s) you chose. Depending on the system you are running on, and the number of images you are analysing this will take a while. To abort press "Ctrl+C".
