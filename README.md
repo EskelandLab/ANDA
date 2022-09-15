@@ -16,21 +16,21 @@ Automated Neuronal Differentiation Analyzer (ANDA) is an image analysis tool use
 
 All necessary Python packages can be installed when installing [Anaconda](https://www.anaconda.com/products/individual).
 
-
+Download ANDA:
+```r
+git clone https://github.com/EskelandLab/ANDA.git
+```
 
 
 ## How to use
 
 Before using ANDA, be sure to have back up of all images. Also ensure that you have enough space to run the analysis as the analysis creates output files that require some space. At least twice the space used by the images should be available.
 
-Make a new directory "work_dir" and place all the code files here.
-
-
-Place all images in a separate folder.
+Place all images in a folder separate from the ANDA directory.
 
 ## Starting the tool
 
-From the terminal and while in "work_dir", start the Bash script by typing "bash ANDA.sh" or "./ ANDA.sh" and hit Enter.
+From the terminal and while in the ANDA directory, start the Bash script by typing "bash ANDA.sh" or "./ ANDA.sh" and hit Enter.
 
 
 ### Setting the analysis parameters
