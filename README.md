@@ -52,3 +52,7 @@ The tool will now run through the images and apply the analysis metric(s) you ch
 
 When the analysis has finished, the results are stored in csv files named "results_{metric}.csv" in the same directory as the image subfolders.
 Note that there are also csv files stored in the directories with names ending with "results". These csv files contain unsummarized data on every identified particle in every image.
+
+## Troubleshooting
+
+When running or restarting the analysis by running ANDA.sh, an error message regarding already existing folders might occur, causing the pipeline to halt. To overcome this, either delete the folders in the error message or comment lines 32-39 in the ANDA.sh file.
