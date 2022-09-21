@@ -36,3 +36,5 @@ if [[ ${outlines} == "yes"  ]]; then
   mkdir ${dir_name}_outlines_neurites # Outlines directory for neurites
   mkdir ${dir_name}_outlines_branching # Outlines directory for neurite attachment points
 fi
+
+snakemake --snakefile data_snakefile # Run snakefile
