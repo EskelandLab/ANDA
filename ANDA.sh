@@ -28,6 +28,7 @@ cd ..
 dirs_len=${#dirs_[@]}
 
 
+# Make directories to store results. Add numbersign # to skip these commands
 mkdir ${dir_name}_results_cells # Results directory for cells
 mkdir ${dir_name}_results_neurites # Results directory for neurites
 mkdir ${dir_name}_results_branching # Results directory for neurite attachment points
