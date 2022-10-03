@@ -16,7 +16,7 @@ and saved in the file_names.txt file in the same directory as the scripts and a 
 If outlines are set to be saved, an additional directory is created.
 '
 
-python3 96_well_linux.py
+python3 anda_setup.py
 
 scripts_dir=$(pwd) # Directory with scripts
 dir_name=$(awk 'FNR == 1 {print}' ${scripts_dir}/pipeline_parameters.txt)
