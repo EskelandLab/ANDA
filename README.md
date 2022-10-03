@@ -2,7 +2,7 @@
 
 Automated Neuronal Differentiation Analyzer (ANDA) is an image analysis tool used for analysis of microscopy images from 2d neuronal cell cultures. The pipeline is a series of Python scripts executed in succession by Snakemake. Important metrics in neurodevelopment, namely cell bodies, neurites and neurite attachment points are retrieved from images and analysed using [Fiji](https://imagej.net/Fiji/Downloads).
 
-![image](https://github.com/EskelandLab/ANDA/anda_header.png "ANDA")
+![image](https://github.com/EskelandLab/ANDA/blob/main/anda_header.png "ANDA")
 
 
 ## Installing
