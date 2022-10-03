@@ -1,125 +1,136 @@
 #!/bin/python3
 
+"""Sort the data from csv files after image analysis"""
+
+import sys
 import pandas as pd
 import numpy as np
-import sys
 
-analysis= sys.argv[1] # Cell bodies, neurites or neurite attachment points
-dir_ =  sys.argv[2]  # Directory 
+analysis = sys.argv[1] # Cell bodies, neurites or neurite attachment points
+dir_ = sys.argv[2]  # Directory
 ar_threshold = int(sys.argv[3]) # Aspect ratio threshold
 output = sys.argv[4]
 
+with open(f'{dir_}/file_names.txt', 'r') as file_names:
+    file_list = file_names.readlines()
+file_list = [i.rstrip() for i in file_list]
+
+
+cell_area = [] # Area selection, area preoccupied by identified particle
+cell_width = [] # Width of minor axis of a fitted ellipse
+cell_length = [] # Length of major axis of a fitted ellipse
+cell_num_count = [] # Number of identified particles
+cell_image = []
+
+
+neurite_area = [] # Area selection, area preoccupied by identified particle
+neurite_width = [] # Width of minor axis of a fitted ellipse
+neurite_length = [] # Length of major axis of a fitted ellipse
+neurite_num_count = [] # Number of identified particles
+neurite_ar_removals = [] # Particles removed for not surpassing user set aspect ratio threshold
+neurite_image = []
+
+
+attachment_num_count = [] # Number of identified particles
+attachment_image = []
+
+def write_dataframe(metrics):
+    """Convert metrics dictionary to pandas dataframe and write to csv"""
+
+    dataframe = pd.DataFrame(data = metrics)
+    return dataframe.to_csv(f"{output}")
+
+
 def data_sort(metric):
-    if metric == "cells": 
-        area = [] # Area selection, area preoccupied by identified particle
-        width = [] # Width of minor axis of a fitted ellipse
-        length = [] # Length of major axis of a fitted ellipse
-        num_count = [] # Number of identified particles
-        image = []
-        file_names = open(f'{dir_}/file_names.txt', 'r')
-        file_list = file_names.readlines()
-        file_names.close()
-        file_list = [i.rstrip() for i in file_list]
+    """Sort data into metrics specified by the analysis parameters"""
+
+    if metric == "cells":
         for file_ in file_list:
             try:
-                data = pd.read_csv(f"{dir_}_results_{metric}/{file_}.csv", usecols = ['Area', 'Minor', 'Major'])
+                data = pd.read_csv(f"{dir_}_results_{metric}/{file_}.csv", \
+                usecols = ['Area', 'Minor', 'Major'])
+
                 count = len(data["Area"])
                 mean_area = np.mean(data["Area"])
                 mean_width = np.mean(data["Minor"])
                 mean_length = np.mean(data["Major"])
-                num_count.append(count)
-                area.append(mean_area)
-                width.append(mean_width)
-                length.append(mean_length)
-                image.append(f"{file_}")
+                cell_num_count.append(count)
+                cell_area.append(mean_area)
+                cell_width.append(mean_width)
+                cell_length.append(mean_length)
+                cell_image.append(f"{file_}")
 
             except ValueError:
-                num_count.append(0)
-                area.append(0)
-                width.append(0)
-                length.append(0)            
-                image.append(f"{file_}")
-        
-        d = {'Image': image,
-             'Count': num_count,
-             'Mean_area': area,
-             'Mean_width': width,
-             'Mean_length': length}
-    
-        df = pd.DataFrame(data = d)
-        df.to_csv(f"{output}")
-    
-    elif metric == "neurites": 
-        area = [] # Area selection, area preoccupied by identified particle
-        width = [] # Width of minor axis of a fitted ellipse
-        length = [] # Length of major axis of a fitted ellipse
-        num_count = [] # Number of identified particles
-        ar_removals = [] # Particles removed for not surpassing user set aspect ratio threshold
-        image = []
-        file_names = open(f'{dir_}/file_names.txt', 'r')
-        file_list = file_names.readlines()
-        file_names.close()
-        file_list = [i.rstrip() for i in file_list]
+                cell_num_count.append(0)
+                cell_area.append(0)
+                cell_width.append(0)
+                cell_length.append(0)
+                cell_image.append(f"{file_}")
+
+        metrics_dict = {'Image': cell_image,
+             'Count': cell_num_count,
+             'Mean_area': cell_area,
+             'Mean_width': cell_width,
+             'Mean_length': cell_length}
+
+        write_dataframe(metrics_dict)
+
+    elif metric == "neurites":
         for file_ in file_list:
             try:
-                data = pd.read_csv(f"{dir_}_results_{metric}/{file_}.csv", usecols = ['Area', 'Minor', 'Major', 'AR'])
+                data = pd.read_csv(f"{dir_}_results_{metric}/{file_}.csv", \
+                usecols = ['Area', 'Minor', 'Major', 'AR'])
+
                 if ar_threshold > 0:
                     data_2 = data[data['AR'] > ar_threshold]
                     mean_length = np.mean(data_2["Major"])
                     mean_width = np.mean(data_2["Minor"])
                     mean_area = np.mean(data_2["Area"])
-                    ar_removals.append(len(data) - len(data_2))
+                    neurite_ar_removals.append(len(data) - len(data_2))
                 else:
                     mean_length = np.mean(data["Major"])
                     mean_width = np.mean(data["Minor"])
                     mean_area = np.mean(data["Area"])
-                    ar_removals.append(0)
+                    neurite_ar_removals.append(0)
+
                 count = len(data["Area"])
-                num_count.append(count)
-                area.append(mean_area)
-                width.append(mean_width)
-                length.append(mean_length)            
-                image.append(f"{file_}")
+                neurite_num_count.append(count)
+                neurite_area.append(mean_area)
+                neurite_width.append(mean_width)
+                neurite_length.append(mean_length)
+                neurite_image.append(f"{file_}")
 
             except ValueError:
-                num_count.append(0)
-                area.append(0)
-                width.append(0)
-                length.append(0)            
-                image.append(f"{file_}")
+                neurite_num_count.append(0)
+                neurite_area.append(0)
+                neurite_width.append(0)
+                neurite_length.append(0)
+                neurite_image.append(f"{file_}")
 
-        d = {'Image': image,
-             'Count': num_count,
-             'Mean_area': area,
-             'Mean_width': width,
-             'Mean_length': length}
-    
-    
-        df = pd.DataFrame(data = d)
-        df.to_csv(f"{output}")
-    
-    if metric == "attachment": 
-        num_count = [] # Number of identified particles
-        image = []
-        file_names = open(f'{dir_}/file_names.txt', 'r')
-        file_list = file_names.readlines()
-        file_names.close()
-        file_list = [i.rstrip() for i in file_list]
+        metrics_dict = {'Image': neurite_image,
+             'Count': neurite_num_count,
+             'Mean_area': neurite_area,
+             'Mean_width': neurite_width,
+             'Mean_length': neurite_length}
+
+
+        write_dataframe(metrics_dict)
+
+    if metric == "attachment":
         for file_ in file_list:
             try:
                 data = pd.read_csv(f"{dir_}_results_{metric}/{file_}.csv", usecols = ['Area'])
                 count = len(data["Area"])
-                num_count.append(count)
-                image.append(f"{file_}")
+                attachment_num_count.append(count)
+                attachment_image.append(f"{file_}")
 
             except ValueError:
-                num_count.append(0)
-                image.append(f"{file_}")
-        
-        d = {'Image': image,
-             'Count': num_count}
-    
-        df = pd.DataFrame(data = d)
-        df.to_csv(f"{output}")
+                attachment_num_count.append(0)
+                attachment_image.append(f"{file_}")
+
+        metrics_dict = {'Image': attachment_image,
+             'Count': attachment_num_count}
+
+        write_dataframe(metrics_dict)
 
 data_sort(analysis)
