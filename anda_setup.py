@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import tkinter as tk
+import tkinter.filedialog
 
 
 
@@ -20,7 +21,7 @@ class PipelineStart:
         ### GUI aesthetics
         self.wndw = tk.Frame(wndw)
         wndw.title("Automated Neuronal Differentiation Analyzer")
-        self.wndw.grid(column=0,row=0)
+        self.wndw.grid(column = 0,row = 0)
         self.wndw.columnconfigure(0, weight = 1)
         self.wndw.rowconfigure(0, weight = 1)
         self.wndw.pack()
@@ -105,7 +106,7 @@ class PipelineStart:
 
     def btn_save_outlines(self):
         """ Save motif outlines """
-        self.show_outlines = "yes"
+        self.show_outlines = "show_outlines"
         self.show_outlines_button.configure(state=tk.DISABLED)
         return self.show_outlines
 
@@ -133,11 +134,6 @@ class PipelineStart:
         self.imagej_button.configure(state=tk.DISABLED)
         return self.imagej_path
 
-    def btn_click(self, item):
-        """ Render click event """
-        self.wells_list.append(str(item))
-        return self.wells_list
-
     def disable(self, btn):
         """ Disable button """
         self.labels[btn].configure(state=tk.DISABLED)
@@ -161,7 +157,7 @@ class PipelineStart:
     def btn_attachment(self):
         """ Select neurite attachment points button """
         self.params_list.append("attachment")
-        self.branching.configure(state=tk.DISABLED)
+        self.attachment.configure(state=tk.DISABLED)
         return self.params_list
 
     def btn_clear(self):
@@ -170,10 +166,6 @@ class PipelineStart:
         self.params_list.clear()
         for (count, func) in enumerate(self.functions_list):
             self.functions_list[func].configure(state=tk.NORMAL)
-        return self.params_list
-
-    def return_params_list(self):
-        """ Return parameters in list """
         return self.params_list
 
     def return_params_str(self):
@@ -200,9 +192,9 @@ class PipelineStart:
 
     def return_output_list(self):
         """ Output from selection of the parameters """
-        self.output_list = list(self.files_dir, self.imagej_path, self.params_str, \
+        self.output_list = [self.files_dir, self.imagej_path, self.params_str, \
         str(self.cell_line.get()), self.show_outlines, self.params_compact, self.ar_threshold, \
-        self.image_height, self.image_width)
+        self.image_height, self.image_width]
 
         return self.output_list
 
