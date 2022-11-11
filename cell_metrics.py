@@ -52,7 +52,7 @@ def particle_analysis(analysis):
         imp = IJ.getImage()
         IJ.run("8-bit")
         IJ.run("Auto Threshold", "method={}".format(CELL_THRESHOLD))
-        if WATERSHED_CHOICE == "yes":
+        if WATERSHED_CHOICE == "apply_watershed":
             IJ.run("Watershed")
             IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circularity, max_cell_circularity))
         else:
@@ -74,7 +74,7 @@ def particle_analysis(analysis):
         imp = IJ.getImage()
         IJ.run("8-bit")
         IJ.run("Auto Threshold", "method={}".format(NEURITE_THRESHOLD))
-        if WATERSHED_CHOICE == "yes":
+        if WATERSHED_CHOICE == "apply_watershed":
             IJ.run("Watershed")
             IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circularity, max_cell_circularity))
         else:
@@ -103,7 +103,7 @@ def particle_analysis(analysis):
         # Threshold highlighting neurites
         IJ.run(imp_c, "Auto Threshold", "method={}".format(NEURITE_THRESHOLD))
         IJ.run(imp_n, "Auto Threshold", "method={}".format(NEURITE_THRESHOLD))
-        if WATERSHED_CHOICE == "yes":
+        if WATERSHED_CHOICE == "apply_watershed":
             IJ.run(imp_c, "Watershed", "") # Watershed segmentation
             IJ.run(imp_c, "Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Overlay".format(min_cell_size, max_cell_size, min_cell_circularity, max_cell_circularity)) # Use cell body parameters to extract overlay
             overlay_c = ImagePlus.getOverlay(imp_c) # Get cell body overlay

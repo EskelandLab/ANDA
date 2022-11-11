@@ -92,17 +92,23 @@ class PipelineStart:
         borderwidth = 2, command = lambda : (self.btn_clear()))
         self.clear.grid(row = 14, column = 0)
 
+        # Pre-set to not apply watershed. When selected, watershed algorithm will be applied
+        self.watershed = "no"
+        self.watershed_button = tk.Button(master = self.wndw, text = "Apply watershed", \
+        borderwidth = 2, command = lambda : (self.btn_watershed()))
+        self.watershed_button.grid(row = 11, column = 1)
+
         # Pre-set to not show outlines. When selected, motif outlines will be saved
         self.show_outlines = "no"
         self.show_outlines_button = tk.Button(master = self.wndw, text = "Save motif outlines", \
         borderwidth = 2, command = lambda : (self.btn_save_outlines()))
-        self.show_outlines_button.grid(row = 11, column = 1)
+        self.show_outlines_button.grid(row = 12, column = 1)
 
 
         self.submit_button = tk.Button(self.wndw, text = "Save and quit", cursor = "hand1", \
         borderwidth = 2, command = self.return_all)
         # Select this button to submit the txt file and continue with analysis
-        self.submit_button.grid(row = 13, column = 1)
+        self.submit_button.grid(row = 14, column = 1)
 
     def btn_save_outlines(self):
         """ Save motif outlines """
@@ -160,6 +166,12 @@ class PipelineStart:
         self.attachment.configure(state=tk.DISABLED)
         return self.params_list
 
+    def btn_watershed(self):
+        """ Select watershed button """
+        self.watershed = "apply_watershed"
+        self.watershed_button.configure(state=tk.DISABLED)
+        return self.watershed
+
     def btn_clear(self):
         """ Clear selection """
         self.functions_list = [self.neurites, self.cells, self.attachment]
@@ -171,7 +183,7 @@ class PipelineStart:
     def return_params_str(self):
         """ Return parameters in string """
         for param in self.params_list:
-            self.params_str += param+' '
+            self.params_str += param + ' '
         return self.params_str
 
     def return_params_compact(self):
@@ -194,7 +206,7 @@ class PipelineStart:
         """ Output from selection of the parameters """
         self.output_list = [self.files_dir, self.imagej_path, self.params_str, \
         str(self.cell_line.get()), self.show_outlines, self.params_compact, self.ar_threshold, \
-        self.image_height, self.image_width]
+        self.image_height, self.image_width, self.watershed]
 
         return self.output_list
 
