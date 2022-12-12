@@ -59,4 +59,4 @@ Note that there are also csv files stored in the directories with names ending w
 
 * When running or restarting the analysis by running ANDA.sh, an error message regarding already existing folders might occur, causing the pipeline to halt. To overcome this, either delete the folders in the error message or comment lines 32-39 in the ANDA.sh file.
 
-* If Snakemake skips a rule and outputs an error about missing files in rule 'data_sort', re-do the analysis by running this: `snakemake --snakefile data_snakefile`. Snakemake will not restart the analysis all over, but continue from where it stopped previously.
+* If Snakemake skips a rule and outputs an error about missing files in rule 'data_sort', re-do the analysis by running this: `snakemake --snakefile data_snakefile`. Snakemake will not restart the analysis all over, but continue from where it stopped previously. Another option is to run the analysis using fewer cores by using the --cores N or -c N parameter.
