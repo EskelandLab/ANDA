@@ -84,7 +84,7 @@ class PipelineStart:
         borderwidth = 2, command = lambda : (self.btn_cells()))
         self.cells.grid(row = 11, column = 0)
 
-        self.attachment = tk.Button(master = self.wndw, text = "Neurite attachment points ", \
+        self.attachment = tk.Button(master = self.wndw, text = "Neurite attachment points  ", \
         borderwidth = 2, command = lambda : (self.btn_attachment()))
         self.attachment.grid(row = 12, column = 0)
 

@@ -6,12 +6,12 @@ import sys
 import pandas as pd
 import numpy as np
 
-analysis = sys.argv[1] # Cell bodies, neurites or neurite attachment points
+ANALYSIS = sys.argv[1] # Cell bodies, neurites or neurite attachment points
 dir_ = sys.argv[2]  # Directory
 ar_threshold = int(sys.argv[3]) # Aspect ratio threshold
 output = sys.argv[4]
 
-with open(f'{dir_}/file_names.txt', 'r') as file_names:
+with open(f'{dir_}/file_names.txt', 'r', encoding="utf8") as file_names:
     file_list = file_names.readlines()
 file_list = [i.rstrip() for i in file_list]
 
@@ -33,6 +33,14 @@ neurite_image = []
 
 attachment_num_count = [] # Number of identified particles
 attachment_image = []
+
+def append_zeros(*args):
+    """ Append zero to the parameter lists if no parameters were identified"""
+
+    for i in args:
+        i.append(0)
+    return args
+
 
 def write_dataframe(metrics):
     """Convert metrics dictionary to pandas dataframe and write to csv"""
@@ -61,10 +69,7 @@ def data_sort(metric):
                 cell_image.append(f"{file_}")
 
             except ValueError:
-                cell_num_count.append(0)
-                cell_area.append(0)
-                cell_width.append(0)
-                cell_length.append(0)
+                append_zeros(cell_num_count, cell_area, cell_width, cell_length)
                 cell_image.append(f"{file_}")
 
         metrics_dict = {'Image': cell_image,
@@ -101,10 +106,7 @@ def data_sort(metric):
                 neurite_image.append(f"{file_}")
 
             except ValueError:
-                neurite_num_count.append(0)
-                neurite_area.append(0)
-                neurite_width.append(0)
-                neurite_length.append(0)
+                append_zeros(neurite_num_count, neurite_area, neurite_width, neurite_length)
                 neurite_image.append(f"{file_}")
 
         metrics_dict = {'Image': neurite_image,
@@ -133,4 +135,4 @@ def data_sort(metric):
 
         write_dataframe(metrics_dict)
 
-data_sort(analysis)
+data_sort(ANALYSIS)
