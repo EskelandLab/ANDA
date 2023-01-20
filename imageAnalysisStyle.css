@@ -1,0 +1,97 @@
+body {
+    width: 65%;
+    background-color: #e2e8f0;
+    margin-left: auto;
+}
+
+h1 {
+    font-size: 20px;
+    line-height: 28px;
+}
+
+form {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.grid {
+    width: 40%;
+    display: grid;
+    column-count: 1;
+}
+
+.checkline {
+    width: 80%;
+    margin-top: 6px;
+}
+
+.checkbox {
+    float: left;
+    margin-right: 8px;
+}
+
+label {
+    font-family: sans-serif;
+    font-size: 12px;
+    line-height: 20px;
+    font-weight: 700;
+}
+
+.number-input {
+    border-width: 2px;
+    border-radius: 4px;
+    border-color: rgb(75 88 99);
+    padding: 12px;
+    margin-right: auto;
+    margin-bottom: 8px;
+}
+
+.number-input:hover {
+    border-color: rgb(191 219 254);
+}
+
+.checkboxes {
+    margin-top: 8px;
+}
+
+.btn {
+    font-size: 18px;
+    font-family: sans-serif;
+    text-decoration: none;
+    background-color: #2563eb;
+    border-width: 2px;
+    border-radius: 8px;
+    color: rgb(229 231 235);
+    font-weight: 700;
+    padding: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-right: 32px;
+    margin-top: 20px;
+}
+
+#submit:hover {
+    background-color: #3b82f6;
+    color: rgb(249 250 251);
+}
+
+.btn:active {
+    border-color: rgb(229 231 235);
+}
+
+#cancel {
+    background-color: rgb(243 244 246);
+    color: rgb(75 85 99);
+}
+
+#cancel:hover {
+    color: rgb(209 213 219);
+}
+
+.btns {
+    margin-top: 40px;
+}
+
+.ar {
+    margin-top: 12px;
+}
