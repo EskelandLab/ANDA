@@ -16,11 +16,11 @@
             <div id="cells">
                 <div class="grid ar">
                     <label for="aspect_ratio">Min. cell size (px)</label>
-                    <input class="numberinput" type="number" value=0>
+                    <input class="numberinput" type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" value=0>
                 </div>
                 <div class="grid">
                     <label for="aspect_ratio">Max. cell size(px)</label>
-                    <input class="numberinput" type="number" value=0>
+                    <input class="numberinput" type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" value=0>
                 </div>
                 <div class="grid">
                     <label for="aspect_ratio">Min. cell circularity</label>
@@ -34,11 +34,11 @@
             <div id="neurites">
                 <div class="grid ar">
                     <label for="aspect_ratio">Min. neurite size (px)</label>
-                    <input class="numberinput" type="number" value=0>
+                    <input class="numberinput" type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" value=0>
                 </div>
                 <div class="grid">
                     <label for="aspect_ratio">Max. neurite size(px)</label>
-                    <input class="numberinput" type="number" value=0>
+                    <input class="numberinput" type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" value=0>
                 </div>
                 <div class="grid">
                     <label for="aspect_ratio">Min. neurite circularity</label>
@@ -56,4 +56,17 @@
             </div>
     </form>
 </body>
+<script>
+function clearInput(e) {
+    if (e.value == "0") {
+        e.value = "";
+    }
+}
+
+function refillInput(e) {
+    if (e.value == "") {
+        e.value = "0";
+    }
+}
+</script>
 </html>

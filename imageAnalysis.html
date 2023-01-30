@@ -1,52 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <meta charset="UTF-8">
-        <title>Automated Neuronal Differentiation Analyzer</title>
-        <link rel="stylesheet" href="imageAnalysisStyle.css">
+    <meta charset="UTF-8">
+    <title>Automated Neuronal Differentiation Analyzer</title>
+    <link rel="stylesheet" href="imageAnalysisStyle.css">
 </head>
 <body>
     <h1>Perform image analysis</h1>
-    <form action="">
+    <form id="form">
         <input type="file" value="Select image directory">
         <div class="grid ar">
-            <label for="aspect_ratio">Neurite aspect ratio</label>
-            <input class="number-input" type="number" value=0>
-        </div>
-        <div class="grid">
-            <label for="aspect_ratio">Image height (px)</label>
-            <input class="number-input" type="number" value=100>
-        </div>
-        <div class="grid">
-            <label for="aspect_ratio">Image width (px)</label>
-            <input class="number-input" type="number" value=100>
+            <label for="aspect-ratio">Neurite aspect ratio</label>
+            <input id="aspect_ratio" class="number-input" name="aspect-ratio" type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" value=0>
         </div>
         <div class="checkboxes">
             <div class="checkline">
-                <input class="checkbox" type="checkbox">
-                <label class="checklabel" for="aspect_ratio">Neurite lengths</label>
+                <input class="checkbox" type="checkbox" name="metrics" value="neurite-lengths">
+                <label class="checklabel" for="neurite-lengths">Neurite lengths</label>
             </div>
             <div class="checkline">
-                <input class="checkbox" type="checkbox">
-                <label class="checklabel" for="aspect_ratio">Cell body count</label>
+                <input class="checkbox" type="checkbox" name="metrics" value="cell-count">
+                <label class="checklabel" for="cell-count">Cell body count</label>
             </div>
             <div class="checkline">
-                <input class="checkbox" type="checkbox">
-                <label class="checklabel" for="aspect_ratio">Neurite attachment points</label>
+                <input class="checkbox" type="checkbox" name="metrics" value="neurite-attachment">
+                <label class="checklabel" for="neurite-attachment">Neurite attachment points</label>
             </div>
             <div class="checkline">
-                <input class="checkbox" type="checkbox">
-                <label class="checklabel" for="aspect_ratio">Apply watershed segmentation</label>
+                <input class="checkbox" type="checkbox" name="metrics" value="apply-watershed">
+                <label class="checklabel" for="apply-watershed">Apply watershed segmentation</label>
             </div>
             <div class="checkline">
-                <input class="checkbox" type="checkbox">
-                <label class="checklabel" for="aspect_ratio">Save motif outlines</label>
+                <input class="checkbox" type="checkbox" name="metrics" value="save-outlines">
+                <label class="checklabel" for="save-outlines">Save motif outlines</label>
             </div>
             <div class="btns">
                 <a id="cancel" class="btn" href="index.html">Cancel</a>
-                <a id="submit" class="btn" href="index.html">Submit</a>
+                <a id="submit" class="btn" type="submit">Submit</a>
+                <input type="button" id="save-button" value="Save JSON">
+                <button type="submit">submit</button>
             </div>
         </div>
     </form>
 </body>
+<script>
+import { writeTextFile } from '@/tauri-apps/api/fs';
+// function clearInput(e) {
+//     if (e.value == "0") {
+//         e.value = "";
+//     }
+// }
+// 
+// function refillInput(e) {
+//     if (e.value == "") {
+//         e.value = "0";
+//     }
+// }
+// function handleSubmit(e) {
+//     e.preventDefault();
+//     const data = new FormData(e.target);
+//     const value = Object.fromEntries(data.entries());
+//     value.metrics = data.getAll("metrics");
+//     valueString = JSON.stringify(value);
+//     console.log(valueString);
+// 
+//     let fs = require('fs');
+//     // fs.writeFile("/home/hallvard/javascript_tutorial/test/test.json", valueString, function(err, result) {
+//     //     if(err) {
+//     //         console.log('error')
+//     //     };
+//     // });
+//     }
+// console.log("BBBBB")
+// const form = document.querySelector('form');
+// form.addEventListener('submit', handleSubmit);
+</script>
 </html>
