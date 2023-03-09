@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Automated Neuronal Differentiation Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="cell-parameters">
+    <h1>Create cell parameters input file</h1>
+    <form>
+        <div class="cell-grid">
+            <div class="grid cell-line">
+                <label for="celltype">Cell line</label>
+                <input id="cell-type" class="numberinput" type="text" onfocus="removeClassNames(this)" name="metrics" value=>
+            </div>
+            <span class="visible">Please enter cell line</span>
+        </div>
+        <div class="grid">
+            <label for="threshold">Threshold</label>
+            <select id="dropdown" name="metrics">
+                <option value="isodata">IsoData</option>
+                <option value="triangle">Triangle</option>
+                <option value="mean">Mean</option>
+                <option value="minerror">MinError</option>
+                <option value="maxentropy">MaxEntropy</option>
+                <option value="yen">Yen</option>
+                <option value="moment">Moment</option>
+                <option value="li">Li</option>
+                <option value="otsu">Otsu</option>
+                <option value="renyientropy">RenyiEntropy</option>
+                <option value="shanbhag">Shanbhag</option>
+                <option value="huang">Huang</option>
+                <option value="intermodes">Intermodes</option>
+                <option value="triangle">Triangle</option>
+                <option value="none">None</option>
+            </select>
+        </div>
+        <section>
+            <div class="metric-box">
+                <div class="grid min">
+                    <label for="min-cell-size">Min. cell size (px)</label>
+                    <input class="numberinput" type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" name="metrics" min=0 value=0>
+                </div>
+                <div class="grid max">
+                    <label for="max-cell-size">Max. cell size(px)</label>
+                    <input class="numberinput" type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" name="metrics" min=0 value=0>
+                </div>
+            </div>
+            <div class="metric-box">
+                <div class="grid min">
+                    <label for="min-neurite-size">Min. neurite size (px)</label>
+                    <input class="numberinput" type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" name="metrics" min=0 value=0>
+                </div>
+                <div class="grid max">
+                    <label for="max-neurite-size">Max. neurite size(px)</label>
+                    <input class="numberinput" type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" name="metrics" min=0 value=0>
+                </div>
+            </div>
+            <div class="metric-box">
+                <div class="grid min">
+                    <label for="min-cell-circ">Min. cell circularity</label>
+                    <input class="numberinput" type="number" onfocusout="refillMinCirc(this)" name="metrics" min=0 max=1 step=0.01 value=0.00>
+                </div>
+                <div class="grid max">
+                    <label for="max-cell-circ">Max. cell circularity</label>
+                    <input class="numberinput" type="number" onfocusout="refillMaxCirc(this)" name="metrics" min=0 max=1 step=0.01 value=1.00>
+                </div>
+            </div>
+            <div class="metric-box">
+                <div class="grid min">
+                    <label for="min-neurite-circ">Min. neurite circularity</label>
+                    <input class="numberinput" type="number" onfocusout="refillMinCirc(this)" name="metrics" min=0 max=1 step=0.01 value=0.00>
+                </div>
+                <div class="grid max">
+                    <label for="max-neurite-circ">Max. neurite circularity</label>
+                    <input class="numberinput" type="number" onfocusout="refillMaxCirc(this)" name="metrics" min=0 max=1 step=0.01 value=1.00>
+                </div>
+            </div>
+        </section>
+        <div class="btns cell-parameters">
+            <button class="btn cancel" onclick="history.back()">Cancel</button>
+            <input id="submit" class="btn" type="submit" value="Submit">
+        </div>
+    </form>
+</body>
+<script>
+
+const fs = window.__TAURI__.fs
+
+// Dropdown menu
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("dropdown").addEventListener("change", function() {
+        let selectedOption = this.value;
+    });
+});
+
+// Functions for clearing and refilling number inputs
+function clearInput(e) {
+    if (e.value == "0") {
+        e.value = "";
+    }
+}
+
+function refillInput(e) {
+    if (e.value == "") {
+        e.value = "0";
+    }
+}
+
+function refillMinCirc(e) {
+    if (e.value == "" || e.value == 0) {
+        e.value = "0.00";
+    }
+}
+
+function refillMaxCirc(e) {
+    if (e.value == "" || e.value == 1) {
+        e.value = "1.00";
+    }
+}
+
+// Write cell line parameters
+function handleSubmit(e) {
+    e.preventDefault();
+
+    const cellType = document.getElementById("cell-type");
+    const errorSpan = document.querySelector("span");
+    if (!cellType.value) {
+        errorSpan.classList.add("invalid");
+        cellType.classList.add("invalid");    
+    } else {
+        const data = new FormData(e.target);
+        const value = Object.fromEntries(data.entries());
+        value.metrics = data.getAll("metrics");
+        valueString = JSON.stringify(value);
+        fs.writeFile(cellType.value + ".json", valueString);
+        history.back();
+    };
+}
+
+// Remove error message when cell line input is selected
+function removeClassNames(e) {
+    const cellType = document.getElementById("cell-type");
+    const errorSpan = document.querySelector("span");
+    errorSpan.classList.remove("invalid");
+    cellType.classList.remove("invalid");    
+
+}
+
+const form = document.querySelector('form');
+form.addEventListener('submit', handleSubmit);
+
+</script>
+</html>

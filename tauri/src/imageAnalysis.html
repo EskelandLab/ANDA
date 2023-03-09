@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Automated Neuronal Differentiation Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="image-analysis">
+    <h1>Perform image analysis</h1>
+    <form>
+        <div class="cell-grid">
+            <div class="file-input">
+                <input id="file" class="inputfile" type="file" name="file">
+                <label id="inputfile-label" for="file">Add cell line...</label>
+            </div>
+                <span id="filename"></span>
+        </div>
+        <div class="grid ar">
+            <label for="aspect-ratio">Neurite aspect ratio</label>
+            <input id="aspect_ratio" class="numberinput" name="aspect-ratio" min=0 type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" value=0>
+        </div>
+        <div class="checkboxes">
+            <div id="watershed" class="checkline">
+                <input class="checkbox" type="checkbox" name="metrics" value="apply_watershed">
+                <label class="checklabel" for="apply_watershed">Apply watershed segmentation</label>
+            </div>
+            <div class="checkline">
+                <input class="checkbox" type="checkbox" name="metrics" value="save-outlines">
+                <label class="checklabel" for="save_outlines">Save motif outlines</label>
+            </div>
+        </div>
+        <div class="btns image-analysis">
+            <button class="btn cancel" onclick="history.back()">Cancel</button>
+            <input id="submit" class="btn" onclick="runCommand()" type="submit" value="Submit">
+        </div>
+    </form>
+</body>
+<script>
+
+const fs = window.__TAURI__.fs
+const readFile = fs.readTextFile
+
+const command = window.__TAURI__.shell.Command
+
+// Functions for clearing and refilling number input
+function clearInput(e) {
+    if (e.value == "0") {
+        e.value = "";
+    }
+}
+
+function refillInput(e) {
+    if (e.value == "") {
+        e.value = "0";
+    }
+}
+
+// Read cell parameters
+async function handleFile(e) {
+    const fileContents = await readFile(e);
+}
+
+// Handle cell line parameters
+const fileOutput = document.getElementById("filename");
+const fileReader = document.getElementById("file");
+
+fileReader.addEventListener("change", (event) => {
+    let fileName = fileReader.files[0].name;
+    if (fileName.includes(".json")) {
+        fileOutput.textContent = fileName;
+        handleFile(fileName);
+    } else {
+        fileOutput.textContent = 'Error: file must be JSON format!';
+    }
+})
+
+// Write image analysis parameters
+function handleSubmit(e) {
+    e.preventDefault();
+    const data = new FormData(e.target);
+    const value = Object.fromEntries(data.entries());
+    value.metrics = data.getAll("metrics");
+    valueString = JSON.stringify(value);
+    fs.writeFile("ANDA_input.json", valueString, function(err, result) {
+        if(err) {
+            console.log('error writing file')
+        };
+    });
+}
+
+
+const form = document.querySelector('form');
+form.addEventListener('submit', handleSubmit);
+
+const { invoke } = window.__TAURI__.tauri
+function runCommand() {
+    invoke('run_anda', { name: 'World!' })
+        .then((response) => {
+        window.header.innerHTML = response
+    })
+}
+
+</script>
+</html>
