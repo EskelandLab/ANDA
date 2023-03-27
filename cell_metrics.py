@@ -1,166 +1,206 @@
-# @String input_analysis
-# @String image_dir
-# @String cell_parameters
-# @String outlines
-# @Integer height
-# @Integer width
-# @String filenames
-# @String outputfiles
-# @String outlinefiles
-
-"""
-Jython script to perform cell metric quantification in ImageJ
-"""
+""" Jython script to perform cell metric quantification in Fiji """
 
 from ij import IJ, ImagePlus
 from ij.plugin import ImageCalculator
+from java.util.concurrent import Executors
+import time
 
-# Open file with parameters for analyzing cell type
-with open("{}_parameters.txt".format(cell_parameters), 'r') as cell:
-    cell_read = cell.readlines()
+# Open file with parameters for image analysis
+with open("anda_parameters.txt", 'r') as anda_parameters:
+    analysis_read = anda_parameters.read().splitlines()
 
-cell_line_parameters = [str(i.rstrip()) for i in cell_read] # Cell parameters list
-PATH = str(cell_line_parameters[0])
+CELL_LINE = str(analysis_read[0]) # Name of cell line
+PATH = str(analysis_read[1])
+OUTLINES = str(analysis_read[2]) # Whether or not to save motif outlines
+WATERSHED_CHOICE = str(analysis_read[3])
+
+# Open file with image file names
+with open("file_names.txt", 'r') as file_names:
+    input_files = file_names.read().splitlines()
+
+# Open file with parameters for analyzing cell line
+with open("{}_parameters.txt".format(CELL_LINE), 'r') as cell_type:
+    cell_read = cell_type.readlines()
+
+cell_line_params = [str(i.rstrip()) for i in cell_read] # Cell parameters list
 
 ##### Cell metric parameters
-min_cell_size = int(cell_line_parameters[1])
-max_cell_size = int(cell_line_parameters[2])
-min_cell_circularity = float(cell_line_parameters[3])
-max_cell_circularity = float(cell_line_parameters[4])
-min_neurite_size = int(cell_line_parameters[5])
-max_neurite_size = int(cell_line_parameters[6])
-min_neurite_circularity = float(cell_line_parameters[7])
-max_neurite_circularity = float(cell_line_parameters[8])
-CELL_THRESHOLD = str(cell_line_parameters[9])
-NEURITE_THRESHOLD = str(cell_line_parameters[10])
-WATERSHED_CHOICE = str(cell_line_parameters[11])
+min_cell_size = int(cell_line_params[0])
+max_cell_size = int(cell_line_params[1])
+min_cell_circ = float(cell_line_params[2])
+max_cell_circ = float(cell_line_params[3])
+min_neurite_size = int(cell_line_params[4])
+max_neurite_size = int(cell_line_params[5])
+min_neurite_circ = float(cell_line_params[6])
+max_neurite_circ = float(cell_line_params[7])
+CELL_THRESHOLD = str(cell_line_params[8])
+NEURITE_THRESHOLD = str(cell_line_params[9])
 
-
-if CELL_THRESHOLD == "NO THRESHOLD":
+# Thresholding cells and neurites
+if CELL_THRESHOLD == "none":
     CELL_THRESHOLD = "Default" # Default thresholding method in ImageJ
-if NEURITE_THRESHOLD == "NO THRESHOLD":
+if NEURITE_THRESHOLD == "none":
     NEURITE_THRESHOLD = "Default" # Default thresholding method in ImageJ
 
-IJ.run("Set Measurements...", "area mean standard modal min centroid center perimeter bounding fit shape feret's integrated median skewness kurtosis area_fraction stack display add redirect=None decimal=3") # All available measurements
+IJ.run("Set Measurements...", "area fit shape display add redirect=None decimal=3")
 image_calc = ImageCalculator() # ImageJ plugin
 
-def particle_analysis(analysis):
-    """Quantify cell body count, neurite lengths and neurite attachment points"""
-
-    if analysis == "cells": # Run cell body count analysis
-        IJ.open("{}/{}".format(str(image_dir), str(filenames)))
-        imp = IJ.getImage()
-        IJ.run("8-bit")
-        IJ.run("Auto Threshold", "method={}".format(CELL_THRESHOLD))
-        if WATERSHED_CHOICE == "apply_watershed":
-            IJ.run("Watershed")
-            IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circularity, max_cell_circularity))
-        else:
-            IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circularity, max_cell_circularity))
-        IJ.saveAs("Results", "{}".format(str(outputfiles)))
-        IJ.run("Clear Results")
-        if outlines == "show_outlines":
-            IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circularity, max_cell_circularity))
-            overlay_ = ImagePlus.getOverlay(imp)
-            IJ.newImage("blank_c", "RGB white", width, height, 1)
-            imp2 = IJ.getImage().setOverlay(overlay_)
-            imp2 = IJ.getImage()
-            imp3 = imp2.flatten()
-            IJ.run(imp3, "8-bit", "")
-            IJ.saveAs(imp3, "Tiff", "{}".format(str(outlinefiles)))
-
-    elif analysis == "neurites": # Run neurite length analysis
-        IJ.open("{}/{}".format(str(image_dir), str(filenames)))
-        imp = IJ.getImage()
-        IJ.run("8-bit")
-        IJ.run("Auto Threshold", "method={}".format(NEURITE_THRESHOLD))
-        if WATERSHED_CHOICE == "apply_watershed":
-            IJ.run("Watershed")
-            IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circularity, max_cell_circularity))
-        else:
-            IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circularity, max_cell_circularity))
-        IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_neurite_size, max_neurite_size, min_neurite_circularity, max_neurite_circularity))
-        IJ.saveAs("Results", "{}".format(str(outputfiles)))
-        IJ.run("Clear Results")
-        if outlines == "show_outlines":
-            IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circularity, max_cell_circularity))
-            overlay_ = ImagePlus.getOverlay(imp)
-            IJ.newImage("blank_n", "RGB white", width, height, 1)
-            imp2 = IJ.getImage().setOverlay(overlay_)
-            imp2 = IJ.getImage()
-            imp3 = imp2.flatten()
-            IJ.run(imp3, "8-bit", "")
-            IJ.saveAs(imp3, "Tiff", "{}".format(str(outlinefiles)))
 
 
-    elif analysis == "attachment": # Run neurite attachment point analysis
-        img = IJ.open("{}/{}".format(str(image_dir), str(filenames)))
-        imp_c = IJ.getImage() # Cell bodies
-        imp_n = IJ.getImage() # Neurites
-        IJ.run(imp_c, "8-bit", "")
-        IJ.run(imp_n, "8-bit", "")
+def cell_analysis(file_):
+    """Quantify cell body count"""
 
-        # Threshold highlighting neurites
-        IJ.run(imp_c, "Auto Threshold", "method={}".format(NEURITE_THRESHOLD))
-        IJ.run(imp_n, "Auto Threshold", "method={}".format(NEURITE_THRESHOLD))
-        if WATERSHED_CHOICE == "apply_watershed":
-            IJ.run(imp_c, "Watershed", "") # Watershed segmentation
-            IJ.run(imp_c, "Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Overlay".format(min_cell_size, max_cell_size, min_cell_circularity, max_cell_circularity)) # Use cell body parameters to extract overlay
-            overlay_c = ImagePlus.getOverlay(imp_c) # Get cell body overlay
+    IJ.open(file_)
+    imp = IJ.getImage()
+    IJ.run(imp, "Invert", "")
+    IJ.run("8-bit")
+    IJ.run("Auto Threshold", "method={}".format(CELL_THRESHOLD))
+    if WATERSHED_CHOICE == "apply_watershed":
+        IJ.run("Watershed")
+        IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ))
+    else:
+        IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ))
+        print(file_)
 
-            IJ.run(imp_n, "Watershed", "") # Watershed segmentation
-            IJ.run(imp_n, "Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Overlay".format(min_neurite_size, max_neurite_size, min_neurite_circularity, max_neurite_circularity)) # Use neurite parameters to extract overlay
-            overlay_n = ImagePlus.getOverlay(imp_n) # Get neurite overlay
-        else:
-            IJ.run(imp_c, "Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Overlay".format(min_cell_size, max_cell_size, min_cell_circularity, max_cell_circularity)) # Use cell body parameters to extract overlay
-            overlay_c = ImagePlus.getOverlay(imp_c) # Get cell body overlay
+    IJ.saveAs("Results", "{}_results_cells/{}.csv".format(PATH, file_))
+    # IJ.run("Clear Results")
 
-            IJ.run(imp_n, "Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Overlay".format(min_neurite_size, max_neurite_size, min_neurite_circularity, max_neurite_circularity)) # Use neurite parameters to extract overlay
-            overlay_n = ImagePlus.getOverlay(imp_n) # Get neurite overlay
+    if OUTLINES == "save_outlines":
+        IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Overlay".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ))
+        overlay_ = ImagePlus.getOverlay(imp)
+        img_width = imp.getWidth()
+        img_height = imp.getHeight()
+        IJ.newImage("blank_c", "RGB white", img_width, img_height, 1)
+        imp2 = IJ.getImage().setOverlay(overlay_)
+        imp2 = IJ.getImage()
+        imp3 = imp2.flatten()
+        IJ.run(imp3, "8-bit", "")
+        IJ.saveAs(imp3, "Tiff", "{}_outlines_cells/{}".format(PATH, file_))
 
-        # Blank image for pasting the overlay onto
-        IJ.newImage("{}_blank_c".format(filenames), "RGB white", width, height, 1)
-        imp_c2 = IJ.getImage().setOverlay(overlay_c)
-        imp_c2 = IJ.getImage()
-        imp_c3 = imp_c2.flatten()
-        IJ.run(imp_c3, "8-bit", "")
-        IJ.run(imp_c3, "Make Binary", "")
-        IJ.saveAs(imp_c3, "Tiff", "{}/imp_c3.tif".format(PATH))
 
-        # Blank image for pasting the overlay onto
-        IJ.newImage("{}_blank_n".format(filenames), "RGB white", width, height, 1)
-        imp_n2 = IJ.getImage().setOverlay(overlay_n)
-        imp_n2 = IJ.getImage()
-        imp_n3 = imp_n2.flatten()
-        IJ.run(imp_n3, "8-bit", "")
-        IJ.run(imp_n3, "Make Binary", "")
-        IJ.saveAs(imp_n3, "Tiff", "{}/imp_n3.tif".format(PATH))
-        IJ.run(imp_n3, "Find Edges", "") # Sobel edge detector
+def neurite_analysis(file_):
+    """Quantify neurite lengths"""
 
-        # Get the overlap between cell bodies and neurites - the attachment points
-        imp_res = ic.run("Multiply create", imp_n3, imp_c3)
-        IJ.saveAs(imp_res, "Tiff", "{}/{}_imp_res.tif".format(PATH, filenames))
-        IJ.run(imp_res, "Analyze Particles...", "size=0-100 pixel circularity=0.00-1.00 show=Nothing display summarize")
-        IJ.saveAs("Results", "{}".format(str(outputfiles)))
-        IJ.run("Clear Results")
-        if outlines == "show_outlines":
-            IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circularity, max_cell_circularity))
-            overlay_ = ImagePlus.getOverlay(imp_res)
-            IJ.newImage("blank_b", "RGB white", width, height, 1)
-            imp2 = IJ.getImage().setOverlay(overlay_)
-            imp2 = IJ.getImage()
-            imp3 = imp2.flatten()
-            IJ.run(imp3, "8-bit", "")
-            IJ.saveAs(imp3, "Tiff", "{}".format(str(outlinefiles)))
+    # IJ.open(file_)
+    # imp = IJ.getImage()
+    IJ.run("8-bit")
+    IJ.run("Auto Threshold", "method={}".format(NEURITE_THRESHOLD))
+    if WATERSHED_CHOICE == "apply_watershed":
+        IJ.run("Watershed")
+        IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ))
+    else:
+        IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ))
+    IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_neurite_size, max_neurite_size, min_neurite_circ, max_neurite_circ))
+    IJ.saveAs("Results", "{}_results_neurites/{}".format(PATH, file_))
+    # IJ.run("Clear Results")
+    if OUTLINES == "save_outlines":
+        IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ))
+        overlay_ = ImagePlus.getOverlay(imp)
+        img_width = imp.getWidth()
+        img_height = imp.getHeight()
+        IJ.newImage("blank_n", "RGB white", img_width, img_height, 1)
+        imp2 = IJ.getImage().setOverlay(overlay_)
+        imp2 = IJ.getImage()
+        imp3 = imp2.flatten()
+        IJ.run(imp3, "8-bit", "")
+        IJ.saveAs(imp3, "Tiff", "{}_outlines_neurites/{}".format(PATH, file_))
 
-particle_analysis(input_analysis)
 
-def file_read():
-    """If ouputfile is not written, write an empty outputfile"""
-    try:
-        output = open(outputfiles, "r")
-    except IOError:
-        with open(outputfiles, "w") as output:
-            output.write("NO IDENTIFIED MOTIFS")
+def attachment_analysis(file_):
+    """Quantify neurite attachment points"""
 
-file_read()
+    # IJ.open(file_)
+    imp_c = imp # Cell bodies
+    imp_n = imp # Neurites
+
+    # imp_c = IJ.getImage() # Cell bodies
+    # imp_n = IJ.getImage() # Neurites
+    IJ.run(imp_c, "8-bit", "")
+    IJ.run(imp_n, "8-bit", "")
+
+    # Threshold highlighting neurites
+    IJ.run(imp_c, "Auto Threshold", "method={}".format(NEURITE_THRESHOLD))
+    IJ.run(imp_n, "Auto Threshold", "method={}".format(NEURITE_THRESHOLD))
+    if WATERSHED_CHOICE == "apply_watershed":
+        IJ.run(imp_c, "Watershed", "") # Watershed segmentation
+        IJ.run(imp_c, "Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Overlay".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ)) # Use cell body parameters to extract overlay
+        overlay_c = ImagePlus.getOverlay(imp_c) # Get cell body overlay
+
+        IJ.run(imp_n, "Watershed", "") # Watershed segmentation
+        IJ.run(imp_n, "Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Overlay".format(min_neurite_size, max_neurite_size, min_neurite_circ, max_neurite_circ)) # Use neurite parameters to extract overlay
+        overlay_n = ImagePlus.getOverlay(imp_n) # Get neurite overlay
+    else:
+        IJ.run(imp_c, "Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Overlay".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ)) # Use cell body parameters to extract overlay
+        overlay_c = ImagePlus.getOverlay(imp_c) # Get cell body overlay
+
+        IJ.run(imp_n, "Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Overlay".format(min_neurite_size, max_neurite_size, min_neurite_circ, max_neurite_circ)) # Use neurite parameters to extract overlay
+        overlay_n = ImagePlus.getOverlay(imp_n) # Get neurite overlay
+
+    # Blank image for pasting the overlay onto
+    img_width = imp_c.getWidth()
+    img_height = imp_c.getHeight()
+    IJ.newImage("{}_blank_c".format(file_), "RGB white", img_width, img_height, 1)
+    imp_c2 = IJ.getImage().setOverlay(overlay_c)
+    imp_c2 = IJ.getImage()
+    imp_c3 = imp_c2.flatten()
+    IJ.run(imp_c3, "8-bit", "")
+    IJ.run(imp_c3, "Make Binary", "")
+    IJ.saveAs(imp_c3, "Tiff", "{}/imp_c3.tif".format(PATH))
+
+    # Blank image for pasting the overlay onto
+    img_width = imp_c.getWidth()
+    img_height = imp_c.getHeight()
+    IJ.newImage("{}_blank_n".format(file_), "RGB white", img_width, img_height, 1)
+    imp_n2 = IJ.getImage().setOverlay(overlay_n)
+    imp_n2 = IJ.getImage()
+    imp_n3 = imp_n2.flatten()
+    IJ.run(imp_n3, "8-bit", "")
+    IJ.run(imp_n3, "Make Binary", "")
+    IJ.saveAs(imp_n3, "Tiff", "{}/imp_n3.tif".format(PATH))
+    IJ.run(imp_n3, "Find Edges", "") # Sobel edge detector
+
+    # Get the overlap between cell bodies and neurites - the attachment points
+    imp_res = image_calc.run("Multiply create", imp_n3, imp_c3)
+    IJ.saveAs(imp_res, "Tiff", "{}/{}_imp_res.tif".format(PATH, file_))
+    IJ.run(imp_res, "Analyze Particles...", "size=0-100 pixel circularity=0.00-1.00 show=Nothing display summarize")
+    IJ.saveAs("Results", "{}_results_attachment/{}".format(PATH, file_))
+    IJ.run("Clear Results")
+    if OUTLINES == "save_outlines":
+        IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ))
+        overlay_ = ImagePlus.getOverlay(imp_res)
+        img_width = imp_c.getWidth()
+        img_height = imp_c.getHeight()
+        IJ.newImage("blank_b", "RGB white", img_width, img_height, 1)
+        imp2 = IJ.getImage().setOverlay(overlay_)
+        imp2 = IJ.getImage()
+        imp3 = imp2.flatten()
+        IJ.run(imp3, "8-bit", "")
+        IJ.saveAs(imp3, "Tiff", "{}_outlines_attachment/{}".format(PATH, file_))
+
+# Fixed thread pool with 3 threads
+executor = Executors.newFixedThreadPool(3)
+
+
+# Perform image analysis of 3 metrics at a time
+for file_name in input_files:
+    # IJ.open(file_name)
+    # imp = IJ.getImage()
+    cell_analysis(file_name)
+
+    # executor.submit(cell_analysis, imp)
+    # executor.submit(neurite_analysis, imp)
+    # executor.submit(attachment_analysis, imp)
+
+    # executor.submit(cell_analysis, file_name)
+    # executor.submit(neurite_analysis, file_name)
+    # executor.submit(attachment_analysis, file_name)
+
+# def file_read():
+#     """If ouputfile is not written, write an empty outputfile"""
+#     try:
+#         output = open(outputfiles, "r")
+#     except IOError:
+#         with open(outputfiles, "w") as output:
+#             output.write("NO IDENTIFIED MOTIFS")
+# 
+# file_read()
