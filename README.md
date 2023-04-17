@@ -1,28 +1,16 @@
-# Automated Neuronal Differentiation Analyzer
+# ANDA
 
-Automated Neuronal Differentiation Analyzer (ANDA) is an image analysis tool used for analysis of microscopy images from 2d neuronal cell cultures. The pipeline is a series of Python scripts executed in succession by the workflow manager [Snakemake](https://snakemake.readthedocs.io). Important metrics in neurodevelopment, namely cell bodies, neurites and neurite attachment points are retrieved from images and analysed using [Fiji](https://imagej.net/Fiji/Downloads).
+ANDA is an image analysis tool used for analysis of microscopy images from 2d neuronal cell cultures. The pipeline is a series of Python scripts executed in succession to perform image analysis using Fiji modules. Important metrics in neurodevelopment, namely cell bodies, neurites and neurite attachment points are retrieved from images and analysed.
 
 ![image](https://github.com/EskelandLab/ANDA/blob/main/anda_logo.png "ANDA")
 
 
 ## Installing
 
-### Dependencies
-* [Fiji](https://imagej.net/Fiji/Downloads)
-* Python 3
-  - Packages:
-    - numpy
-    - pandas
-    - tkinter
-* [Snakemake](https://snakemake.readthedocs.io)
-
-All necessary Python packages can be installed when installing [Anaconda](https://www.anaconda.com).
-
 Download ANDA:
 ```r
 git clone https://github.com/EskelandLab/ANDA.git
 ```
-
 
 ## How to use
 
@@ -55,8 +43,3 @@ The tool will now run through the images and apply the analysis metric(s) you ch
 When the analysis has finished, the results are stored in csv files named "results_{metric}.csv" in the same directory as the image subfolders.
 Note that there are also csv files stored in the directories with names ending with "results". These csv files contain unsummarized data on every identified particle in every image.
 
-## Troubleshooting
-
-* When running or restarting the analysis by running ANDA.sh, an error message regarding already existing folders might occur, causing the pipeline to halt. To overcome this, either delete the folders in the error message or comment lines 32-39 in the ANDA.sh file.
-
-* If Snakemake skips a rule and outputs an error about missing files in rule 'data_sort', re-do the analysis by running this: `snakemake --snakefile data_snakefile`. Snakemake will not restart the analysis all over, but continue from where it stopped previously. Another option is to run the analysis using fewer cores by using the --cores N or -c N parameter.
