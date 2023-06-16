@@ -1,5 +1,5 @@
 {
-  "name": "anda_tauri",
+  "name": "anda",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,12 +7,6 @@
     "tauri": "tauri"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1.2.3",
-    "jest": "^29.4.3"
-  },
-  "description": "This template should help get you started developing with Tauri in vanilla HTML, CSS and Javascript.",
-  "main": "index.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+    "@tauri-apps/cli": "^1.4.0"
+  }
 }
