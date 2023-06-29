@@ -1,6 +1,6 @@
 # ANDA
 
-ANDA is an image analysis tool used for analysis of microscopy images from 2d neuronal cell cultures. The pipeline is a series of Python scripts executed in succession to perform image analysis using Fiji modules. Important metrics in neurodevelopment, namely cell bodies, neurites and neurite attachment points are retrieved from images and analysed.
+ANDA is an image analysis tool used for analysis of microscopy images from two dimensional (2d) neuronal cell cultures. The pipeline is a series of Python scripts executed in succession to perform image analysis using Fiji modules. Important metrics in neurodevelopment, namely cell bodies, neurites and neurite attachment points are retrieved from images and analysed.
 
 ![image](https://github.com/EskelandLab/ANDA/blob/main/anda_logo.png "ANDA")
 
