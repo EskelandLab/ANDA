@@ -14,7 +14,7 @@ git clone https://github.com/EskelandLab/ANDA.git
 
 ## How to use
 
-Before using ANDA, be sure to have back up of all images. Also ensure that you have enough space to run the analysis as the analysis creates output files that require some space. At least twice the space used by the images should be available.
+Before using ANDA, be sure to have a back up of all images. Also ensure that you have enough space to run the analysis as the analysis creates output files. You will need at least twice the space used by the images.
 
 Place all images in a folder separate from the ANDA directory.
 
