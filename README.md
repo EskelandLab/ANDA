@@ -28,4 +28,4 @@ Note that there are also csv files stored in the directories with names ending w
 
 ## Graphical Overview
 
-![image] https://github.com/EskelandLab/ANDA/blob/main/ANDA.jpg
+https://github.com/EskelandLab/ANDA/blob/main/ANDA.jpg
