@@ -26,3 +26,6 @@ From the terminal and while in the ANDA directory, start the Bash script by typi
 When the analysis has finished, the results are stored in csv files named "results_{metric}.csv" in the same directory as the image subfolders.
 Note that there are also csv files stored in the directories with names ending with "results". These csv files contain unsummarized data on every identified particle in every image.
 
+## Graphical Overview
+
+![image] https://github.com/EskelandLab/ANDA/blob/main/ANDA.jpg
