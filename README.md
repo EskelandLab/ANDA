@@ -50,4 +50,4 @@ https://doi.org/10.1016/j.taap.2022.116130
 ANDA is a desktop application built with TAURI that uses Python 3 scripts for data handling and function-call execution, summoning ImageJ functions from Fiji.
 
 ## License
-his project is licensed under the MIT.
+This project is licensed under the MIT.
