@@ -1,0 +1,12 @@
+Mouse primary neurons E16
+300
+1450
+0.38
+1.00
+70
+1000
+0.00
+0.32
+Default
+Default
+0
