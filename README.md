@@ -31,23 +31,16 @@ Note that there are also csv files stored in the directories with names ending w
 ![image](https://github.com/EskelandLab/ANDA/blob/main/ANDA.jpg)
 
 ## Example images
-Example images generated in EskelandLab and PaulsenLab that have been analysed by ANDA can be downloaded with license CC BY 4.0. from NeuroImaging Tools & Resources Collaboratory (NITRC) https://www.nitrc.org/projects/anda_neuronal/
+Example images generated in EskelandLab and PaulsenLab that have been analysed by ANDA can be downloaded with license CC BY 4.0. from [NeuroImaging Tools & Resources Collaboratory (NITRC)](https://www.nitrc.org/projects/anda_neuronal/)
 
 ## Citations information & Contributors
-Please cite ANDA preprint in bioRxiv.
-ANDA: An open-source tool for automated image analysis of neuronal differentiation
-Hallvard Austin Wæhler, Nils-Anders Labba, Ragnhild Elisabeth Paulsen,  Geir Kjetil Sandve,  Ragnhild Eskeland
-doi: https://doi.org/10.1101/2023.04.27.538564
-https://www.biorxiv.org/content/10.1101/2023.04.27.538564v1
+Please cite ANDA preprint in bioRxiv: 
+[ANDA: An open-source tool for automated image analysis of neuronal differentiation](https://www.biorxiv.org/content/10.1101/2023.04.27.538564v1) 
 
-ANDA has also been described in following publication:
-Nils-Anders Labba, Hallvard Austin Wæhler, Nora Houdaifi, Denis Zosen,
-Fred Haugen, Ragnhild Elisabeth Paulsen, Mussie Ghezu Hadera, Ragnhild Eskeland 
-Paracetamol perturbs neuronal arborization and disrupts the cytoskeletal proteins SPTBN1 and TUBB3 in both human and chicken in vitro models. Toxicology and Applied Pharmacology. 2022;449:116130.
-https://doi.org/10.1016/j.taap.2022.116130
 
-## Acknowledgements
-ANDA is a desktop application built with TAURI that uses Python 3 scripts for data handling and function-call execution, summoning ImageJ functions from Fiji.
+ANDA has also been described in following publication: 
+[Paracetamol perturbs neuronal arborization and disrupts the cytoskeletal proteins SPTBN1 and TUBB3 in both human and chicken in vitro models](https://doi.org/10.1016/j.taap.2022.116130).
+
 
 ## License
 This project is licensed under the MIT.
