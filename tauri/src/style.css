@@ -282,3 +282,32 @@ span#filename {
 .btns.image-analysis {
     margin-right: 10px;
 }
+
+@media (min-width: 1280px) {
+    h1 {
+        font-size: 30px;
+    }
+    label {
+        font-size: 19px;
+        margin-top: 9px;
+        margin-bottom: 3px;
+    }
+    .numberinput {
+        width: 230px;
+        font-size: 19px;
+    }
+    #dropdown {
+        width: 258px;
+        height: 55px;
+        font-size: 19px;
+    }
+    .checkline {
+        margin-top: 20px;
+    }
+    .inputfile + label {
+        font-size: 19px;
+    }
+    .btn {
+        font-size: 38px;
+    }
+}
