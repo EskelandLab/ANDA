@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Automated Neuronal Differentiation Analyzer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="cell-parameters">
@@ -39,21 +38,21 @@
             <div class="metric-box">
                 <div class="grid min">
                     <label for="min-cell-size">Min. cell size (px)</label>
-                    <input class="numberinput" type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" name="metrics" min=0 value=0>
+                    <input class="numberinput" type="number" onfocus="toggleInput(this)" onfocusout="toggleInput(this)" name="metrics" min=0 value=0>
                 </div>
                 <div class="grid max">
                     <label for="max-cell-size">Max. cell size(px)</label>
-                    <input class="numberinput" type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" name="metrics" min=0 value=0>
+                    <input class="numberinput" type="number" onfocus="toggleInput(this)" onfocusout="toggleInput(this)" name="metrics" min=0 value=0>
                 </div>
             </div>
             <div class="metric-box">
                 <div class="grid min">
                     <label for="min-neurite-size">Min. neurite size (px)</label>
-                    <input class="numberinput" type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" name="metrics" min=0 value=0>
+                    <input class="numberinput" type="number" onfocus="toggleInput(this)" onfocusout="toggleInput(this)" name="metrics" min=0 value=0>
                 </div>
                 <div class="grid max">
                     <label for="max-neurite-size">Max. neurite size(px)</label>
-                    <input class="numberinput" type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" name="metrics" min=0 value=0>
+                    <input class="numberinput" type="number" onfocus="toggleInput(this)" onfocusout="toggleInput(this)" name="metrics" min=0 value=0>
                 </div>
             </div>
             <div class="metric-box">
@@ -95,26 +94,22 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // Functions for clearing and refilling number inputs
-function clearInput(e) {
+function toggleInput(e) {
     if (e.value == "0") {
         e.value = "";
-    }
-}
-
-function refillInput(e) {
-    if (e.value == "") {
+    } else if (e.value == "") {
         e.value = "0";
     }
 }
 
 function refillMinCirc(e) {
-    if (e.value == "" || e.value == 0) {
+    if (e.value == "" || parseFloat(e.value) >= 1) {
         e.value = "0.00";
     }
 }
 
 function refillMaxCirc(e) {
-    if (e.value == "" || e.value == 1) {
+    if (e.value == "" || parseFloat(e.value) >= 1) {
         e.value = "1.00";
     }
 }
