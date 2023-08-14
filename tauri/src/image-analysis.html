@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Automated Neuronal Differentiation Analyzer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="image-analysis">
@@ -11,13 +10,13 @@
         <div class="cell-grid">
             <div class="file-input">
                 <input id="file" class="inputfile" type="file" name="file">
-                <label id="inputfile-label" for="file">Add cell line...</label>
+                <label id="inputfile-label" for="file">Add cell file...</label>
             </div>
                 <span id="filename"></span>
         </div>
         <div class="grid ar">
             <label for="aspect-ratio">Neurite aspect ratio</label>
-            <input id="aspect_ratio" class="numberinput" name="aspect-ratio" min=0 type="number" onfocus="clearInput(this)" onfocusout="refillInput(this)" value=0>
+            <input id="aspect_ratio" class="numberinput" name="aspect-ratio" min=0 type="number" onfocus="toggleInput(this)" onfocusout="toggleInput(this)" value=0>
         </div>
         <div class="checkboxes">
             <div id="watershed" class="checkline">
@@ -42,15 +41,11 @@ const readFile = fs.readTextFile
 
 const command = window.__TAURI__.shell.Command
 
-// Functions for clearing and refilling number input
-function clearInput(e) {
+// Toggle the number input
+function toggleInput(e) {
     if (e.value == "0") {
         e.value = "";
-    }
-}
-
-function refillInput(e) {
-    if (e.value == "") {
+    } else if (e.value == "") {
         e.value = "0";
     }
 }
