@@ -51,36 +51,57 @@ function toggleInput(e) {
 }
 
 // Read cell parameters
-async function handleFile(e) {
-    const fileContents = await readFile(e);
+async function handleFile(file) {
+    try {
+        const fileContents = await readFile(file.path);
+        const jsonData = JSON.parse(fileContents);
+        return jsonData;
+    } catch (error) {
+        console.error('Error reading file:', error);
+        return null;
+    }
 }
 
 // Handle cell line parameters
 const fileOutput = document.getElementById("filename");
 const fileReader = document.getElementById("file");
 
-fileReader.addEventListener("change", (event) => {
-    let fileName = fileReader.files[0].name;
+fileReader.addEventListener("change", async (event) => {
+    const selectedFile = fileReader.files[0];
+    let fileName = selectedFile.name;
     if (fileName.includes(".json")) {
         fileOutput.textContent = fileName;
-        handleFile(fileName);
+        const jsonData = await handleFile(selectedFile);
+        if (jsonData) {
+            // Handle jsonData as needed
+        }
     } else {
         fileOutput.textContent = 'Error: file must be JSON format!';
     }
-})
+});
 
 // Write image analysis parameters
-function handleSubmit(e) {
+async function handleSubmit(e) {
     e.preventDefault();
     const data = new FormData(e.target);
-    const value = Object.fromEntries(data.entries());
-    value.metrics = data.getAll("metrics");
-    valueString = JSON.stringify(value);
-    fs.writeFile("ANDA_input.json", valueString, function(err, result) {
-        if(err) {
-            console.log('error writing file')
-        };
+    const value = {};
+    data.forEach((val, key) => {
+        if (key === 'file') {
+            value[key] = val.name; // Include the file name in the JSON
+        } else if (key === 'metrics') {
+            value[key] = data.getAll('metrics');
+        } else {
+            value[key] = val;
+        }
     });
+    
+    const valueString = JSON.stringify(value, null, 2); // Add pretty-printing
+    try {
+        await fs.writeFile("ANDA_input.json", valueString);
+        console.log("File 'ANDA_input.json' written successfully.");
+    } catch (err) {
+        console.error('Error writing file:', err);
+    }
 }
 
 
