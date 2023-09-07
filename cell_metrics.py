@@ -2,7 +2,6 @@
 
 from ij import IJ, ImagePlus
 from ij.plugin import ImageCalculator
-from java.util.concurrent import Executors
 import time
 
 # Open file with parameters for image analysis
@@ -25,16 +24,16 @@ with open("{}_parameters.txt".format(CELL_LINE), 'r') as cell_type:
 cell_line_params = [str(i.rstrip()) for i in cell_read] # Cell parameters list
 
 ##### Cell metric parameters
-min_cell_size = int(cell_line_params[0])
-max_cell_size = int(cell_line_params[1])
-min_cell_circ = float(cell_line_params[2])
-max_cell_circ = float(cell_line_params[3])
-min_neurite_size = int(cell_line_params[4])
-max_neurite_size = int(cell_line_params[5])
-min_neurite_circ = float(cell_line_params[6])
-max_neurite_circ = float(cell_line_params[7])
-CELL_THRESHOLD = str(cell_line_params[8])
-NEURITE_THRESHOLD = str(cell_line_params[9])
+min_cell_size = int(cell_line_params[1])
+max_cell_size = int(cell_line_params[2])
+min_cell_circ = float(cell_line_params[3])
+max_cell_circ = float(cell_line_params[4])
+min_neurite_size = int(cell_line_params[5])
+max_neurite_size = int(cell_line_params[6])
+min_neurite_circ = float(cell_line_params[7])
+max_neurite_circ = float(cell_line_params[8])
+CELL_THRESHOLD = str(cell_line_params[9])
+NEURITE_THRESHOLD = str(cell_line_params[10])
 
 # Thresholding cells and neurites
 if CELL_THRESHOLD == "none":
@@ -177,23 +176,12 @@ def attachment_analysis(file_):
         IJ.run(imp3, "8-bit", "")
         IJ.saveAs(imp3, "Tiff", "{}_outlines_attachment/{}".format(PATH, file_))
 
-# Fixed thread pool with 3 threads
-executor = Executors.newFixedThreadPool(3)
-
 
 # Perform image analysis of 3 metrics at a time
 for file_name in input_files:
     # IJ.open(file_name)
     # imp = IJ.getImage()
     cell_analysis(file_name)
-
-    # executor.submit(cell_analysis, imp)
-    # executor.submit(neurite_analysis, imp)
-    # executor.submit(attachment_analysis, imp)
-
-    # executor.submit(cell_analysis, file_name)
-    # executor.submit(neurite_analysis, file_name)
-    # executor.submit(attachment_analysis, file_name)
 
 # def file_read():
 #     """If ouputfile is not written, write an empty outputfile"""
