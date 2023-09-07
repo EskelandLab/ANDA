@@ -8,10 +8,11 @@ import time
 with open("anda_parameters.txt", 'r') as anda_parameters:
     analysis_read = anda_parameters.read().splitlines()
 
-CELL_LINE = str(analysis_read[0]) # Name of cell line
-PATH = str(analysis_read[1])
+PATH = str(analysis_read[0])
 OUTLINES = str(analysis_read[2]) # Whether or not to save motif outlines
-WATERSHED_CHOICE = str(analysis_read[3])
+CELL_LINE = str(analysis_read[3]) # Name of cell line
+WATERSHED_CHOICE = str(analysis_read[4])
+
 
 # Open file with image file names
 with open("file_names.txt", 'r') as file_names:
@@ -49,7 +50,7 @@ image_calc = ImageCalculator() # ImageJ plugin
 def cell_analysis(file_):
     """Quantify cell body count"""
 
-    IJ.open(file_)
+    IJ.open("{}/{}".format(PATH, file_))
     imp = IJ.getImage()
     IJ.run(imp, "Invert", "")
     IJ.run("8-bit")
@@ -80,7 +81,7 @@ def cell_analysis(file_):
 def neurite_analysis(file_):
     """Quantify neurite lengths"""
 
-    # IJ.open(file_)
+    IJ.open("{}/{}".format(PATH, file_))
     # imp = IJ.getImage()
     IJ.run("8-bit")
     IJ.run("Auto Threshold", "method={}".format(NEURITE_THRESHOLD))
@@ -108,7 +109,9 @@ def neurite_analysis(file_):
 def attachment_analysis(file_):
     """Quantify neurite attachment points"""
 
-    # IJ.open(file_)
+    IJ.open("{}/{}".format(PATH, file_))
+    print("{}/{}".format(PATH, file_))
+    imp = IJ.getImage()
     imp_c = imp # Cell bodies
     imp_n = imp # Neurites
 
@@ -180,8 +183,10 @@ def attachment_analysis(file_):
 # Perform image analysis of 3 metrics at a time
 for file_name in input_files:
     # IJ.open(file_name)
-    # imp = IJ.getImage()
-    cell_analysis(file_name)
+    file_name2 = "{}/{}".format(PATH, file_name)
+    # cell_analysis(file_name2)
+    # neurite_analysis(file_name2)
+    attachment_analysis(file_name)
 
 # def file_read():
 #     """If ouputfile is not written, write an empty outputfile"""
