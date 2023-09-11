@@ -2,6 +2,7 @@
 
 scripts_dir=$(pwd) # Directory with scripts
 dir_name=$(awk 'FNR == 1 {print}' ${scripts_dir}/pipeline_parameters.txt)
+imagej_path=$(awk 'FNR == 2 {print}' ${scripts_dir}/pipeline_parameters.txt)
 outlines_=$(awk 'FNR == 10 {print}' ${scripts_dir}/pipeline_parameters.txt)
 cd ${dir_name}
 ls | grep tif > file_names.txt # Write image file names to list
@@ -20,5 +21,6 @@ if [[ ${outlines} == "save_outlines"  ]]; then
   mkdir ${dir_name}_outlines_branching # Outlines directory for neurite attachment points
 fi
 
+${imagej_path}/ImageJ-linux64 --ij2 --headless --run ${scripts_dir}/cell_metrics.py
 python3 cell_metrics.py
 python3 data_sort.py
