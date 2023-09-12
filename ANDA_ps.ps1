@@ -25,6 +25,5 @@ if ($outlines -eq "save_outlines") {
 }
 
 # Run ImageJ and Python scripts
-& "${imagejPath}\ImageJ-linux64" --ij2 --headless --run "${scriptsDir}\cell_metrics.py"
-python cell_metrics.py
+& "${imagejPath}\ImageJ-win64.exe" --ij2 --headless --run "${scriptsDir}\cell_metrics.py"
 python data_sort.py
