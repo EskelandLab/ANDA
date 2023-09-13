@@ -1,5 +1,4 @@
-# Directory with scripts
-$scriptsDir = (Get-Location).Path
+$scriptsDir = (Get-Location).Path # Directory with scripts
 # Read parameters from pipeline_parameters.txt
 $pipelineParams = Get-Content -Path "${scriptsDir}\pipeline_parameters.txt"
 $dirName = $pipelineParams[0]
@@ -13,15 +12,15 @@ Get-ChildItem | Where-Object { $_.Extension -eq ".tif" } | Select-Object -Expand
 # Change back to the original directory
 Set-Location -Path $scriptsDir
 
-# Make directories to store results
-$dirsLen = $null  # It seems like $dirsLen is not being used in your script, so I'm assigning it a null value.
+# Make directories to store results and/or outlines
+$dirsLen = $null
 mkdir "${dirName}_results_cells"
 mkdir "${dirName}_results_neurites"
-mkdir "${dirName}_results_branching"
+mkdir "${dirName}_results_attachments"
 if ($outlines -eq "save_outlines") {
     mkdir "${dirName}_outlines_cells"
     mkdir "${dirName}_outlines_neurites"
-    mkdir "${dirName}_outlines_branching"
+    mkdir "${dirName}_outlines_attachments"
 }
 
 # Run ImageJ and Python scripts
