@@ -11,16 +11,15 @@ cd ..
 dirs_len=${#dirs_[@]}
 
 
-# Make directories to store results. Add numbersign # to skip these commands
-mkdir ${dir_name}_results_cells # Results directory for cells
-mkdir ${dir_name}_results_neurites # Results directory for neurites
-mkdir ${dir_name}_results_branching # Results directory for neurite attachment points
+# Make directories to store results and/or outlines
+mkdir ${dir_name}_results_cells
+mkdir ${dir_name}_results_neurites
+mkdir ${dir_name}_results_attachments
 if [[ ${outlines} == "save_outlines"  ]]; then
-  mkdir ${dir_name}_outlines_cells # Outlines directory for cells
-  mkdir ${dir_name}_outlines_neurites # Outlines directory for neurites
-  mkdir ${dir_name}_outlines_branching # Outlines directory for neurite attachment points
+  mkdir ${dir_name}_outlines_cells
+  mkdir ${dir_name}_outlines_neurites
+  mkdir ${dir_name}_outlines_attachments
 fi
 
 ${imagej_path}/ImageJ-linux64 --ij2 --headless --run ${scripts_dir}/cell_metrics.py
-python3 cell_metrics.py
 python3 data_sort.py
