@@ -3,7 +3,7 @@
 scripts_dir=$(pwd) # Directory with scripts
 dir_name=$(awk 'FNR == 1 {print}' ${scripts_dir}/pipeline_parameters.txt)
 imagej_path=$(awk 'FNR == 2 {print}' ${scripts_dir}/pipeline_parameters.txt)
-outlines_=$(awk 'FNR == 10 {print}' ${scripts_dir}/pipeline_parameters.txt)
+outlines_=$(awk 'FNR == 4 {print}' ${scripts_dir}/pipeline_parameters.txt)
 cd ${dir_name}
 ls | grep tif > file_names.txt # Write image file names to list
 cd ..
