@@ -5,7 +5,7 @@ from ij.plugin import ImageCalculator
 import time
 
 # Open file with parameters for image analysis
-with open("anda_parameters.txt", 'r') as anda_parameters:
+with open("pipeline_parameters.txt", 'r') as anda_parameters:
     analysis_read = anda_parameters.read().splitlines()
 
 PATH = str(analysis_read[0])
@@ -51,6 +51,7 @@ def cell_analysis(file_):
     """Quantify cell body count"""
 
     IJ.open("{}/{}".format(PATH, file_))
+    print(file_)
     imp = IJ.getImage()
     IJ.run(imp, "Invert", "")
     IJ.run("8-bit")
@@ -60,7 +61,6 @@ def cell_analysis(file_):
         IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ))
     else:
         IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ))
-        print(file_)
 
     IJ.saveAs("Results", "{}_results_cells/{}.csv".format(PATH, file_))
     # IJ.run("Clear Results")
@@ -91,7 +91,7 @@ def neurite_analysis(file_):
     else:
         IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ))
     IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_neurite_size, max_neurite_size, min_neurite_circ, max_neurite_circ))
-    IJ.saveAs("Results", "{}_results_neurites/{}".format(PATH, file_))
+    IJ.saveAs("Results", "{}_results_neurites/{}.csv".format(PATH, file_))
     # IJ.run("Clear Results")
     if OUTLINES == "save_outlines":
         IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ))
@@ -110,7 +110,6 @@ def attachment_analysis(file_):
     """Quantify neurite attachment points"""
 
     IJ.open("{}/{}".format(PATH, file_))
-    print("{}/{}".format(PATH, file_))
     imp = IJ.getImage()
     imp_c = imp # Cell bodies
     imp_n = imp # Neurites
@@ -165,7 +164,7 @@ def attachment_analysis(file_):
     imp_res = image_calc.run("Multiply create", imp_n3, imp_c3)
     IJ.saveAs(imp_res, "Tiff", "{}/{}_imp_res.tif".format(PATH, file_))
     IJ.run(imp_res, "Analyze Particles...", "size=0-100 pixel circularity=0.00-1.00 show=Nothing display summarize")
-    IJ.saveAs("Results", "{}_results_attachment/{}".format(PATH, file_))
+    IJ.saveAs("Results", "{}_results_attachments/{}.csv".format(PATH, file_))
     IJ.run("Clear Results")
     if OUTLINES == "save_outlines":
         IJ.run("Analyze Particles...", "size={}-{} pixel circularity={}-{} show=Nothing display summarize".format(min_cell_size, max_cell_size, min_cell_circ, max_cell_circ))
@@ -177,23 +176,11 @@ def attachment_analysis(file_):
         imp2 = IJ.getImage()
         imp3 = imp2.flatten()
         IJ.run(imp3, "8-bit", "")
-        IJ.saveAs(imp3, "Tiff", "{}_outlines_attachment/{}".format(PATH, file_))
+        IJ.saveAs(imp3, "Tiff", "{}_outlines_attachments/{}".format(PATH, file_))
 
 
 # Perform image analysis of 3 metrics at a time
 for file_name in input_files:
-    # IJ.open(file_name)
-    file_name2 = "{}/{}".format(PATH, file_name)
-    # cell_analysis(file_name2)
-    # neurite_analysis(file_name2)
+    cell_analysis(file_name)
+    neurite_analysis(file_name)
     attachment_analysis(file_name)
-
-# def file_read():
-#     """If ouputfile is not written, write an empty outputfile"""
-#     try:
-#         output = open(outputfiles, "r")
-#     except IOError:
-#         with open(outputfiles, "w") as output:
-#             output.write("NO IDENTIFIED MOTIFS")
-# 
-# file_read()
