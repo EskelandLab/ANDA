@@ -70,7 +70,7 @@ def cell_sort():
             cell_length.append(mean_length)
             cell_image.append(f"{file_}")
 
-        except ValueError:
+        except FileNotFoundError:
             append_zeros(cell_num_count, cell_area, cell_width, cell_length)
             cell_image.append(f"{file_}")
 
@@ -109,7 +109,7 @@ def neurite_sort():
             neurite_length.append(mean_length)
             neurite_image.append(f"{file_}")
 
-        except ValueError:
+        except :
             append_zeros(neurite_num_count, neurite_area, neurite_width, neurite_length)
             neurite_image.append(f"{file_}")
 
@@ -133,7 +133,7 @@ def attachment_sort():
             attachment_num_count.append(count)
             attachment_image.append(f"{file_}")
 
-        except ValueError:
+        except FileNotFoundError:
             attachment_num_count.append(0)
             attachment_image.append(f"{file_}")
 
