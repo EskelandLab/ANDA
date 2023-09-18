@@ -11,7 +11,7 @@ DATE = datetime.today().strftime('%Y-%m-%d')
 with open("pipeline_parameters.txt", 'r') as anda_parameters:
     analysis_read = anda_parameters.read().splitlines()
 dir_ = analysis_read[0]  # Directory
-ar_threshold = analysis_read[6] # Aspect ratio threshold
+ar_threshold = analysis_read[4] # Aspect ratio threshold
 
 
 with open(f'{dir_}/file_names.txt', 'r', encoding="utf8") as file_names:
