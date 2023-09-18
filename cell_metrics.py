@@ -9,9 +9,9 @@ with open("pipeline_parameters.txt", 'r') as anda_parameters:
     analysis_read = anda_parameters.read().splitlines()
 
 PATH = str(analysis_read[0])
-OUTLINES = str(analysis_read[2]) # Whether or not to save motif outlines
-CELL_LINE = str(analysis_read[3]) # Name of cell line
-WATERSHED_CHOICE = str(analysis_read[4])
+OUTLINES = str(analysis_read[4]) # Whether or not to save motif outlines
+CELL_LINE = str(analysis_read[2]) # Name of cell line
+WATERSHED_CHOICE = str(analysis_read[3])
 
 
 # Open file with image file names
