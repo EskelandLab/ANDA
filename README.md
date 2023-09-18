@@ -7,10 +7,13 @@ ANDA is an image analysis tool used for analysis of microscopy images from two d
 
 ## Installing
 
-Download ANDA:
-```r
-git clone https://github.com/EskelandLab/ANDA.git
-```
+Download files:
+
+[ANDA.sh](https://github.com/EskelandLab/ANDA/blob/main/ANDA.sh)  
+[cell_metrics.py](https://github.com/EskelandLab/ANDA/blob/main/cell_metrics.py)  
+[data_sort.py](https://github.com/EskelandLab/ANDA/blob/main/data_sort.py)  
+[The fiji folder](https://github.com/EskelandLab/ANDA/tree/main/fiji) or download [Fiji](https://imagej.net/software/fiji/downloads)
+
 
 ## How to use
 
