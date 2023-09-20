@@ -21,6 +21,15 @@ Before using ANDA, be sure to have a back up of all images. Also ensure that you
 
 Place all images in a folder separate from the ANDA directory.
 
+### Create file with pipeline parameters
+Create a txt file in this format:  
+\<Full path to images>  
+\<Full path to Fiji>  
+\<Name of cell line>  
+save_outlines OR no  
+\<aspect ratio threshold>  
+
+Name the file "pipeline_parameters.txt"
 ## Starting the tool
 
 From the terminal and while in the ANDA directory, start the Bash script by typing "bash ANDA.sh" or "./ ANDA.sh" and hit Enter.
