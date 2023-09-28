@@ -2,7 +2,7 @@ $scriptsDir = (Get-Location).Path # Directory with scripts
 # Read parameters from pipeline_parameters.txt
 $pipelineParams = Get-Content -Path "${scriptsDir}\pipeline_parameters.txt"
 $dirName = $pipelineParams[0]
-$imagejPath = $pipelineParams[2]
+$imagejPath = $pipelineParams[1]
 $outlines = $pipelineParams[5]
 
 # Change to the directory specified in $dirName
