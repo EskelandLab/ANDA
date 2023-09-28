@@ -14,6 +14,16 @@ Download files:
 [data_sort.py](https://github.com/EskelandLab/ANDA/blob/main/data_sort.py)  
 [The fiji folder](https://github.com/EskelandLab/ANDA/tree/main/fiji) or download [Fiji](https://imagej.net/software/fiji/downloads)
 
+#### On Windows:
+
+Download files:
+
+[ANDA.sh](https://github.com/EskelandLab/ANDA/blob/main/ANDA.sh)  
+[cell_metrics.py](https://github.com/EskelandLab/ANDA/blob/main/cell_metrics.py)  
+[data_sort.py](https://github.com/EskelandLab/ANDA/blob/main/data_sort.py)  
+[Dockerfile](https://github.com/EskelandLab/ANDA/blob/main/Dockerfile)
+
+Download and install [Docker](https://www.docker.com)
 
 ## How to use
 
@@ -34,6 +44,11 @@ Name the file "pipeline_parameters.txt"
 
 From the terminal and while in the ANDA directory, start the Bash script by typing "bash ANDA.sh" or "./ ANDA.sh" and hit Enter.
 
+#### On Windows:
+
+1. Open command prompt and navigate to the ANDA directory.
+2. Build Docker image: `docker build -t anda .`
+3. Start ANDA by running the Docker image: `docker run -v C:\path\to\your\data:/workspace/data anda`
 
 When the analysis has finished, the results are stored in csv files named "results_{metric}.csv" in the same directory as the image subfolders.
 Note that there are also csv files stored in the directories with names ending with "results". These csv files contain unsummarized data on every identified particle in every image.
